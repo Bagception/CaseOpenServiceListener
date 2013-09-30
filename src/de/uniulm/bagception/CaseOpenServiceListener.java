@@ -42,6 +42,16 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		return true;
 	}
 
+	
+	@Override
+	protected void onPause() {
+		if (serviceBound){
+			serviceBound = false;
+			unbindService(serviceConnection);
+		}
+		super.onPause();
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -105,11 +115,11 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		
 	
 	private void startService(){
-		 Intent serviceIntent = new Intent(this, CaseOpenServiceRemote.class);
+		 Intent serviceIntent = new Intent(CaseOpenServiceRemote.class.getName());
 	        this.startService(serviceIntent);		
 	}
 	private void stopService(){
-		 Intent serviceIntent = new Intent(this, CaseOpenServiceRemote.class);
+		 Intent serviceIntent = new Intent(CaseOpenServiceRemote.class.getName());
 	        this.stopService(serviceIntent);
 	}
 	public void onStartStopServiceClicked(View v){
