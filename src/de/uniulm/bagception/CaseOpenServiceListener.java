@@ -45,11 +45,15 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 	
 	@Override
 	protected void onPause() {
+		unbindService();
+		super.onPause();
+	}
+	
+	private void unbindService(){
 		if (serviceBound){
 			serviceBound = false;
 			unbindService(serviceConnection);
 		}
-		super.onPause();
 	}
 	
 	@Override
@@ -83,11 +87,7 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		TextView caseStatusText = (TextView) findViewById(R.id.casestatus);
 		caseStatusText.setText("unknown");
 		caseStatusText.setTextColor(Color.RED);
-		
-		if (serviceBound){
-			serviceBound = false;
-			unbindService(serviceConnection);
-		}
+		unbindService();
 		
 
 	}
@@ -128,6 +128,7 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		if (ServiceUtil.isServiceRunning(this, CaseOpenServiceConstants.SERVICE_NAME)){
 			Log.d("Service", "stop Service click command");
 			stopService();
+			unbindService();
 		}else{
 			Log.d("Service", "start Service click command");
 			startService();
