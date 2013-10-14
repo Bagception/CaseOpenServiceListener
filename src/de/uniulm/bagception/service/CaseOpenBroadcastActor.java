@@ -1,6 +1,5 @@
 package de.uniulm.bagception.service;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,7 +12,7 @@ public class CaseOpenBroadcastActor extends BroadcastActor<CaseOpenServiceBroadc
 	}
 
 	@Override
-	public void register(Activity a) {
+	public void register(Context a) {
 		IntentFilter filter = new IntentFilter(CaseOpenServiceConstants.BROADCAST_COMMAND_INTENT);
 		filter.addAction(CaseOpenServiceConstants.BROADCAST_CASE_STATE);
 	    a.registerReceiver(this, filter);		
