@@ -101,9 +101,7 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		startStopService.setEnabled(true);
 		
 		
-		if (!serviceBound){
-			Log.d("Service","BIND to "+CaseOpenServiceRemote.class.getName());
-			
+		if (!serviceBound){			
 			if (!bindService(new Intent(CaseOpenServiceRemote.class.getName()),
 	                serviceConnection, Context.BIND_AUTO_CREATE)){
 				Log.d("Service","error binding to service");
@@ -126,11 +124,9 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		Button startStopService = (Button) findViewById(R.id.startStopService);
 		startStopService.setEnabled(false);
 		if (ServiceUtil.isServiceRunning(this, CaseOpenServiceConstants.SERVICE_NAME)){
-			Log.d("Service", "stop Service click command");
 			stopService();
 			unbindService();
 		}else{
-			Log.d("Service", "start Service click command");
 			startService();
 		}
 	}
@@ -172,15 +168,12 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			Log.d("Service","service disconnected");
-
 			remoteService = null;
 		}
 		
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			remoteService=CaseOpenServiceRemote.Stub.asInterface(service);
-			Log.d("Service","service connected");
 			try {
 				if (remoteService.isCaseOpened()){
 					caseOpened();
