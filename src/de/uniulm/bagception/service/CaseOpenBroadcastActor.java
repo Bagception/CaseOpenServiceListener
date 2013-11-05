@@ -21,13 +21,8 @@ public class CaseOpenBroadcastActor extends BroadcastActor<CaseOpenServiceBroadc
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (BagceptionBroadcastContants.BROADCAST_COMMAND_INTENT.equals(intent.getAction())){
-			if (BagceptionBroadcastContants.BROADCAST_COMMAND_SHUTDOWN.equals(intent.getStringExtra(BagceptionBroadcastContants.BROADCAST_COMMAND_INTENT))){
-				reactor.serviceShutdown();
-			}else if(BagceptionBroadcastContants.BROADCAST_COMMAND_START.equals(intent.getStringExtra(BagceptionBroadcastContants.BROADCAST_COMMAND_INTENT))){
-				reactor.serviceStarted();
-			}	
-		}else if (BagceptionBroadcastContants.BROADCAST_CASE_STATE.equals(intent.getAction())){
+			
+		if (BagceptionBroadcastContants.BROADCAST_CASE_STATE.equals(intent.getAction())){
 			if (BagceptionBroadcastContants.CASE_OPEN_STATE_CHANGED_TO_CLOSED == intent.getIntExtra(BagceptionBroadcastContants.BROADCAST_CASE_STATE,-1)){
 				reactor.caseClosed();
 			}else if (BagceptionBroadcastContants.CASE_OPEN_STATE_CHANGED_TO_OPEN == intent.getIntExtra(BagceptionBroadcastContants.BROADCAST_CASE_STATE,-1)){

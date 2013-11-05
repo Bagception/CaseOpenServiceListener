@@ -16,36 +16,40 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import de.philipphock.android.lib.services.ServiceUtil;
+import de.philipphock.android.lib.services.observation.ServiceObservationActor;
+import de.philipphock.android.lib.services.observation.ServiceObservationReactor;
 import de.uniulm.bagception.caseopenservicelistener.R;
 import de.uniulm.bagception.service.CaseOpenBroadcastActor;
 import de.uniulm.bagception.service.CaseOpenServiceBroadcastReactor;
 import de.uniulm.bagception.service.CaseOpenServiceRemote;
 import de.uniulm.bagception.services.ServiceNames;
 
-public class CaseOpenServiceListener extends Activity implements CaseOpenServiceBroadcastReactor{
+public class CaseOpenServiceListener extends Activity implements CaseOpenServiceBroadcastReactor, ServiceObservationReactor{
 
 	private CaseOpenBroadcastActor caseOpenBroadcastActor;
 	private CaseOpenServiceRemote remoteService;
+	private ServiceObservationActor soActor;
 	private boolean serviceBound = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_case_open_service_control);
-		
+		soActor = new ServiceObservationActor(this,ServiceNames.CASE_OPEN_SERVICE);
 		caseOpenBroadcastActor = new CaseOpenBroadcastActor(this);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		//getMenuInflater().inflate(R.menu.case_open_service_control, menu);
-		return true;
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		//getMenuInflater().inflate(R.menu.case_open_service_control, menu);
+//		return true;
+//	}
 
 	
 	@Override
 	protected void onPause() {
 		unbindService();
+		soActor.unregister(this);
 		super.onPause();
 	}
 	
@@ -59,6 +63,7 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 	@Override
 	protected void onResume() {
 		super.onResume();
+		soActor.register(this);
 		if (ServiceUtil.isServiceRunning(this, ServiceNames.CASE_OPEN_SERVICE)){
 			onServiceStarted();
 		}else{
@@ -136,15 +141,6 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 	 */
 
 
-	@Override
-	public void serviceShutdown() {
-		onServiceShutdown();
-	}
-
-	@Override
-	public void serviceStarted() {
-		onServiceStarted();
-	}
 
 	@Override
 	public void caseOpened() {
@@ -185,5 +181,15 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 			}
 		}
 	};
+
+	@Override
+	public void onServiceStarted(String serviceName) {
+		onServiceStarted();
+	}
+
+	@Override
+	public void onServiceStopped(String serviceName) {
+		onServiceShutdown();
+	}
 	
 }
