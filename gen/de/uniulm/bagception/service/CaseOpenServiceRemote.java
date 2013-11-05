@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /home/phil/workspace/CaseOpenServiceListener/src/de/uniulm/bagception/service/CaseOpenServiceRemote.aidl
+ * Original file: X:\\workspaces\\android\\CaseOpenServiceListener\\src\\de\\uniulm\\bagception\\service\\CaseOpenServiceRemote.aidl
  */
 package de.uniulm.bagception.service;
 public interface CaseOpenServiceRemote extends android.os.IInterface

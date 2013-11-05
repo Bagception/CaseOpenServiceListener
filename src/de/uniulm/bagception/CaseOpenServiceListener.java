@@ -1,26 +1,26 @@
 package de.uniulm.bagception;
 
 
-import de.philipphock.android.lib.services.ServiceUtil;
-import de.uniulm.bagception.caseopenservicelistener.R;
-import de.uniulm.bagception.service.CaseOpenBroadcastActor;
-import de.uniulm.bagception.service.CaseOpenServiceBroadcastReactor;
-import de.uniulm.bagception.service.CaseOpenServiceConstants;
-import de.uniulm.bagception.service.CaseOpenServiceRemote;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import de.philipphock.android.lib.services.ServiceUtil;
+import de.uniulm.bagception.caseopenservicelistener.R;
+import de.uniulm.bagception.service.CaseOpenBroadcastActor;
+import de.uniulm.bagception.service.CaseOpenServiceBroadcastReactor;
+import de.uniulm.bagception.service.CaseOpenServiceRemote;
+import de.uniulm.bagception.services.ServiceNames;
 
 public class CaseOpenServiceListener extends Activity implements CaseOpenServiceBroadcastReactor{
 
@@ -59,7 +59,7 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (ServiceUtil.isServiceRunning(this, CaseOpenServiceConstants.SERVICE_NAME)){
+		if (ServiceUtil.isServiceRunning(this, ServiceNames.CASE_OPEN_SERVICE)){
 			onServiceStarted();
 		}else{
 			onServiceShutdown();
@@ -102,7 +102,7 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		
 		
 		if (!serviceBound){			
-			if (!bindService(new Intent(CaseOpenServiceRemote.class.getName()),
+			if (!bindService(new Intent(ServiceNames.CASE_OPEN_SERVICE),
 	                serviceConnection, Context.BIND_AUTO_CREATE)){
 				Log.d("Service","error binding to service");
 			}else{
@@ -113,17 +113,17 @@ public class CaseOpenServiceListener extends Activity implements CaseOpenService
 		
 	
 	private void startService(){
-		 Intent serviceIntent = new Intent(CaseOpenServiceRemote.class.getName());
+		 Intent serviceIntent = new Intent(ServiceNames.CASE_OPEN_SERVICE);
 	        this.startService(serviceIntent);		
 	}
 	private void stopService(){
-		 Intent serviceIntent = new Intent(CaseOpenServiceRemote.class.getName());
+		 Intent serviceIntent = new Intent(ServiceNames.CASE_OPEN_SERVICE);
 	        this.stopService(serviceIntent);
 	}
 	public void onStartStopServiceClicked(View v){
 		Button startStopService = (Button) findViewById(R.id.startStopService);
 		startStopService.setEnabled(false);
-		if (ServiceUtil.isServiceRunning(this, CaseOpenServiceConstants.SERVICE_NAME)){
+		if (ServiceUtil.isServiceRunning(this, ServiceNames.CASE_OPEN_SERVICE)){
 			stopService();
 			unbindService();
 		}else{
